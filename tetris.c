@@ -4,10 +4,15 @@
 #include "tetris.h"     // Declarations for sepcific tetris function
 
 
-void user_isr(){
+void user_isr()
+{
     return;
 }
 
-void tetris(){
+
+// main function where the code will be run
+void tetris()
+{
+    OledUpdate();
     return;
 }
