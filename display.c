@@ -1,6 +1,6 @@
 #include <pic32mx.h>
 #include <stdio.h>
-#include <tetris.h>
+#include "tetris.h"
 
 /* ------------------------------------------------------------ */
 /* Pin definitions for access to OLED control signals on chipKIT Uno32
@@ -187,4 +187,16 @@ void OledPutBuffer(int cb, unsigned char *rgbTx)
         while (!(SPI2STAT & 0x1));
         bTmp = SPI2BUF;
     }
+}
+
+// function to fill array with desired value
+void display_led()
+{
+    int i = 0;
+	while(i < 512)
+	{
+		rgbOledBmp[i] = 255; 
+        i++;
+	}
+    return;
 }
