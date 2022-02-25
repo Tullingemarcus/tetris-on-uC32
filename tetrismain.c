@@ -5,9 +5,12 @@
 
 // main function
 // this is where the program will start
-int main(){
-    
+int main()
+{
+
     OledHostInit();
+    OledDspInit();
+    display_led();
     while(1){
         tetris();
     }
