@@ -190,12 +190,12 @@ void OledPutBuffer(int cb, unsigned char *rgbTx)
 }
 
 // function to fill array with desired value
-void display_led()
+void display_start()
 {
     int i = 0;
 	while(i < 512)
 	{
-		rgbOledBmp[i] = 255; 
+		rgbOledBmp[i] = 0; 
         i++;
 	}
     return;

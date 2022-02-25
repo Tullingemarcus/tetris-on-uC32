@@ -5,7 +5,7 @@ unsigned char Spi2PutByte(unsigned char bVal);
 void OledDspInit(void);
 void OledUpdate(void);
 void OledPutBuffer(int cb, unsigned char *rgbTx);
-void display_led(void);
+void display_start(void);
 
 // declaration of global constant and array
 #define cbOledDispMax   512 //max number of bytes in display buffer

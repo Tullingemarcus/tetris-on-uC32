@@ -10,7 +10,7 @@ int main()
 
     OledHostInit();
     OledDspInit();
-    display_led();
+    display_start();
     while(1){
         tetris();
     }
