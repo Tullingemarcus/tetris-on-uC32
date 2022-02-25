@@ -4,6 +4,10 @@
 #include "tetris.h"     // Declarations for sepcific tetris function
 
 
-void tetris(){
+void user_isr(){
+    return;
+}
 
+void tetris(){
+    return;
 }
