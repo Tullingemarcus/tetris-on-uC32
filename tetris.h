@@ -16,3 +16,6 @@ void user_isr(void);
 void init(void);
 void tetris(void);
 void delay(int);
+void pixelmove(void);
+int blockPos(int, int);
+void blockPage(int);
