@@ -47,7 +47,7 @@ void pixelmove(){
         if(end != 0){     //if true, stack
             return;
         }
-
+        removeRow();
         OledUpdate();
         delay(100);
     }
