@@ -5,7 +5,18 @@
 
 
 void init(){
-    TRISESET &= 0xf00;  // set bits 0-7 to output (0)
-    PORTE += 1;         // LED++ 
+    PORTECLR = 0xff;
+    TRISECLR = 0x0ff;  // set bits 0-7 to output (0)
+    TRISDSET = (1 << 8);
+    TRISD |= 0xf7e0;      // set to input (1)
+    TMR2 = 0x0;           // set timer 2 to start at 0
+    T2CON |= 0x8070;      // 8 start timer, 7 set prescale to 256
+    PR2 = 31250;          // prescale * PR2 = clock frequency = 100ms
+    IFS(0) &= 0xfeff;     // set timeoutflag to 0
+    IEC(0) |= 0x0100;     // enable interrupts
+    IPC(2) |= 0x01c;      // set priority
+    IPC(3) |= 0x01c;
+    IECSET(0) = 0x08800;
+    enable_interrupt();   // call function enable_interrupts from func.s
     return;
 }
