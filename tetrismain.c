@@ -7,7 +7,7 @@
 // this is where the program will start
 int main()
 {
-
+    PORTE &= 0xf00;
     OledHostInit();
     OledDspInit();
     display_start();

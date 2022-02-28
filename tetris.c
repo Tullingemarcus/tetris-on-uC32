@@ -3,7 +3,7 @@
 #include <pic32mx.h>    // Declarations of system-specific addresses etc
 #include "tetris.h"     // Declarations for sepcific tetris function
 
-int blockVal = 0xe00e;
+int blockVal = 0xe0ff;
 void user_isr()
 {
     return;
