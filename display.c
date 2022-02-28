@@ -193,24 +193,29 @@ void OledPutBuffer(int cb, unsigned char *rgbTx)
 void display_start()
 {
     rgbOledBmp[0] = 0xff;
+    
     int i = 1;
 	while(i <= 126)
 	{
 		rgbOledBmp[i] = 1; 
         i++;
 	}
+    rgbOledBmp[116] = 0xff;
     int k = 127;
     while(k <= 384){
         rgbOledBmp[k] = 0xff;
         rgbOledBmp[k + 1] = 0xff;
         k += 128;
     }
+    rgbOledBmp[116 + 128] = 0xff;
+    rgbOledBmp[116 + 256] = 0xff;
     int j = 385;
     while(j <= 510)
 	{
 		rgbOledBmp[j] = 128; 
         j++;
 	}
+    rgbOledBmp[116 + 384] = 0xff;
     rgbOledBmp[511] = 0xff;
     return;
 }
