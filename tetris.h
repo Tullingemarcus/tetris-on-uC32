@@ -10,13 +10,18 @@ void display_start(void);
 // declaration of global constant and array
 #define cbOledDispMax   512 //max number of bytes in display buffer
 unsigned char rgbOledBmp[cbOledDispMax];
+int block[512];                 // tetrisblock
 
 // declaration of other functions
 void user_isr(void);
 void init(void);
 void tetris(void);
 void delay(int);
+void enable_interrupt(void);
 void pixelmove(void);
 int blockPos(int, int);
 void blockPage(int);
-void removeRow(void);
+void removeRow();
+int getbtns(void);
+
+void movepix(int, int, int);
