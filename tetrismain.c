@@ -6,11 +6,11 @@
 // main function
 // this is where the program will start
 int main()
-{
-    PORTE &= 0xf00;
-    OledHostInit();
+{             
+    OledHostInit(); // initialization of oled display
     OledDspInit();
     display_start();
+    init();       // init     
     while(1){
         tetris();
     }
