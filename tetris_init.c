@@ -4,8 +4,8 @@
 #include "tetris.h"     // Declarations for sepcific tetris function
 
 
-void init()
-{
-    TRISESET = 0x0ff;   // set bits 0-7 to output (0)
+void init(){
+    TRISESET &= 0xf00;  // set bits 0-7 to output (0)
+    PORTE += 1;         // LED++ 
     return;
 }
