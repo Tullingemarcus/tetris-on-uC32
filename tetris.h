@@ -19,3 +19,4 @@ void delay(int);
 void pixelmove(void);
 int blockPos(int, int);
 void blockPage(int);
+void removeRow(void);
