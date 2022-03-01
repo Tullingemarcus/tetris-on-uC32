@@ -6,7 +6,9 @@ char page1;
 char page2;
 char page3;
 char page4;
-int block[512];                 // tetrisblock
+
+int block[512];
+int preblockVal;
 
 void blockPage(int blockVal){
     page1 = (blockVal & 0x000000ff);
@@ -15,45 +17,52 @@ void blockPage(int blockVal){
     page4 = (blockVal & 0xff000000) >> 24;
 }
 
-void movepix(int offset, int i, int page){
-    block[(i + 3) + offset * 128] = page;
-    block[(i + 2) + offset * 128] = page;
-    block[i + 1 + offset * 128] = page;
-    block[i + offset * 128] = page;
-    rgbOledBmp[i + offset * 128] |= block[i + offset * 128];
-    rgbOledBmp[i + 1 + offset * 128] |= block[i + 1 + offset * 128];
-    rgbOledBmp[i + 2 + offset * 128] |= block[i + 2 + offset * 128];
-    rgbOledBmp[i + 3 + offset * 128] |= block[i + 3 + offset * 128];
-    return;
-}
-
-void pixelmove(){
+void squareUpdate(){
     int i;
     int end = 0;
     int pos = 0;
-    //i = page; i > (page - 122); 
-    for(i = 110; i > 0; i--){
+    for(i = 106; i > 0; i--){
+        
+        moveSquare(0, i, page1);
+        moveSquare(1, i, page2);
+        moveSquare(2, i, page3);
+        moveSquare(3, i, page4);
 
-
-        movepix(0, i, page1);
-        movepix(1, i, page2);
-        movepix(2, i, page3);
-        movepix(3, i, page4);
-
-        if((end & pos) != 0){     //if true, stack
-        /*
-            rgbOledBmp[i] &= ~block[i + 4];
-            rgbOledBmp[i + 128] &= ~block[i + 128];
-            rgbOledBmp[i + 128 * 2] &= ~block[i + 128 * 2];
-            rgbOledBmp[i + 128 * 3] &= ~block[i + 128 * 3];
-        */
-            return;
+        if(getbtns() & 0x01){
+            preblockVal = square;
+            if(square != 0x78000000){
+               square = square << 2;
+            }
+            if(square <= 0x78000000){
+                deletePrev(0, i);
+                deletePrev(1, i);
+                deletePrev(2, i);
+                deletePrev(3, i);
+                delay(100);
+                blockPage(square);
+                OledUpdate();
+            }
+            else{
+               square = preblockVal;
+            }
         }
-
-        rgbOledBmp[i + 4] &= ~block[i + 4];
-        rgbOledBmp[i + 4 + 128] &= ~block[i + 4 + 128];
-        rgbOledBmp[i + 4 + 128 * 2] &= ~block[i + 4 + 128 * 2];
-        rgbOledBmp[i + 4 + 128 * 3] &= ~block[i + 4 + 128 * 3];
+        if(getbtns() & 0x02){
+            preblockVal =square;
+           square =square >> 2;
+            if(square >= 0x1e){
+                deletePrev(0, i);
+                deletePrev(1, i);
+                deletePrev(2, i);
+                deletePrev(3, i);
+                delay(100);
+                blockPage(square);
+                OledUpdate();
+            }
+            else{
+                square = preblockVal;
+            }
+        }
+        deletePrev(4, i);
 
         end =   (rgbOledBmp[i - 1] & 0xfe) + 
                 (rgbOledBmp[i - 1 + 128] << 8) +
@@ -64,10 +73,192 @@ void pixelmove(){
                 (block[i + 128] << 8) +
                 (block[i + 256] << 16) + 
                 (block[i + 384] << 24));
-        removeRow();
+
+        if((end & pos) != 0){     //if true, stack
+            OledUpdate();
+            if(i > 106){
+                PORTE = 0xff; // temporary
+                while(1){
+                    delay(1000);
+                    if(getbtns() & 0x04){
+                        main();
+                    }
+                }  
+            }
+            return;
+        }
+
+        int k;
+        for(k = 1; k <= 97; k += 2){ 
+            removeRow(k);
+        }
+
         OledUpdate();
-        delay(50);
+        delay(delayVar);
     }
 }
 
+void stickUpdate(){
+    int i;
+    int end = 0;
+    int pos = 0;
+    for(i = 106; i > 0; i--){
+        moveStick(0, i, page1);
+        moveStick(1, i, page2);
+        moveStick(2, i, page3);
+        moveStick(3, i, page4);
+
+        if(getbtns() & 0x01){
+            preblockVal = stick;
+            if(stick != 0x7f800000){
+               stick = stick << 2;
+            }
+            if(stick <= 0x7f800000){
+                deletePrev(0, i);
+                deletePrev(1, i);
+                delay(100);
+                blockPage(stick);
+                OledUpdate();
+            }
+            else{
+               stick = preblockVal;
+            }
+        }
+        if(getbtns() & 0x02){
+            preblockVal = stick;
+            stick = stick >> 2;
+            if(stick >= 0x1fe){
+                deletePrev(0, i);
+                deletePrev(1, i);
+                delay(100);
+                blockPage(stick);
+                OledUpdate();
+            }
+            else{
+                stick = preblockVal;
+            }
+        }
+        deletePrev(2, i);
+
+        end =   (rgbOledBmp[i - 1] & 0xfe) + 
+                (rgbOledBmp[i - 1 + 128] << 8) +
+                (rgbOledBmp[i - 1 + 128 * 2] << 16) +
+                ((rgbOledBmp[i - 1 + 128 * 3] << 24) & 0x7f000000);
+
+        pos =   (block[i] + 
+                (block[i + 128] << 8) +
+                (block[i + 256] << 16) + 
+                (block[i + 384] << 24));
+
+        if((end & pos) != 0){     //if true, stack
+            OledUpdate();
+            if(i > 106){
+                PORTE = 0xff; // temporary
+                while(1){
+                    delay(1000);
+                    if(getbtns() & 0x04){
+                        main();
+                    }
+                }  
+            }
+            return;
+        }
+
+        int k;
+        for(k = 1; k <= 97; k += 2){ 
+            removeRow(k);
+        }
+
+        OledUpdate();
+        delay(delayVar);
+    }
+}
+
+void pillarUpdate(){
+    int i;
+    int end = 0;
+    int pos = 0;
+    for(i = 106; i > 0; i--){
+        
+        movePillar(0, i, page1);
+        movePillar(1, i, page2);
+        movePillar(2, i, page3);
+        movePillar(3, i, page4);
+
+        if(getbtns() & 0x01){
+            preblockVal = pillar;
+            if(pillar != 0x60000000){
+               pillar = pillar << 2;
+            }
+            if(pillar <= 0x60000000){
+                deletePrev(0, i);
+                deletePrev(1, i);
+                deletePrev(2, i);
+                deletePrev(3, i);
+                deletePrev(4, i);
+                deletePrev(5, i);
+                deletePrev(6, i);
+                deletePrev(7, i);
+                delay(100);
+                blockPage(pillar);
+                OledUpdate();
+            }
+            else{
+               pillar = preblockVal;
+            }
+        }
+        if(getbtns() & 0x02){
+            preblockVal = pillar;
+            pillar = pillar >> 2;
+            if(pillar >= 0x6){
+                deletePrev(0, i);
+                deletePrev(1, i);
+                deletePrev(2, i);
+                deletePrev(3, i);
+                deletePrev(4, i);
+                deletePrev(5, i);
+                deletePrev(6, i);
+                deletePrev(7, i);
+                delay(100);
+                blockPage(pillar);
+                OledUpdate();
+            }
+            else{
+                pillar = preblockVal;
+            }
+        }
+        deletePrev(8, i);
+
+        end =   (rgbOledBmp[i - 1] & 0xfe) + 
+                (rgbOledBmp[i - 1 + 128] << 8) +
+                (rgbOledBmp[i - 1 + 128 * 2] << 16) +
+                ((rgbOledBmp[i - 1 + 128 * 3] << 24) & 0x7f000000);
+
+        pos =   (block[i] + 
+                (block[i + 128] << 8) +
+                (block[i + 256] << 16) + 
+                (block[i + 384] << 24));
+        if((end & pos) != 0){     //if true, stack
+            OledUpdate();
+            if(i > 101){
+                PORTE = 0xff; // temporary
+                while(1){
+                    delay(1000);
+                    if(getbtns() & 0x04){
+                        main();
+                    }
+                }  
+            }
+            return;
+        }
+
+        int k;
+        for(k = 1; k <= 97; k += 2){ 
+            removeRow(k);
+        }
+
+        OledUpdate();
+        delay(delayVar);
+    }
+}
 
