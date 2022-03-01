@@ -201,11 +201,14 @@ void display_start()
         i++;
 	}
     rgbOledBmp[116] = 0xff;
-    int k = 127;
-    while(k <= 384){
+    int k;
+    for(k = 127; k <= 384; k += 128){
         rgbOledBmp[k] = 0xff;
         rgbOledBmp[k + 1] = 0xff;
-        k += 128;
+    }
+    for(k = 129; k <= 254; k++){
+        rgbOledBmp[k] = 0x0;
+        rgbOledBmp[k + 128] = 0x0;
     }
     rgbOledBmp[116 + 128] = 0xff;
     rgbOledBmp[116 + 256] = 0xff;
