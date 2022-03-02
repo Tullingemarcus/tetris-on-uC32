@@ -35,8 +35,18 @@ void deletePrev(int, int);
 void moveSquare(int, int, int);
 void moveStick(int, int, int);
 void movePillar(int, int, int);
-void letterA(void);
+void gameover(void);
+
 void digit0(int);
 void digit1(int);
-
+void digit2(int);
+void digit3(int);
+void digit4(int);
+void digit5(int);
+void digit6(int);
+void digit7(int);
+void digit8(int);
+void digit9(int);
+void digitclr(int);
+void score(void);
 
