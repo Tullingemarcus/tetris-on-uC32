@@ -28,7 +28,7 @@ void squareUpdate(){
         moveSquare(2, i, page3);
         moveSquare(3, i, page4);
 
-        if(getbtns() & 0x01){
+        if(getbtns() & 0x02){
             preblockVal = square;
             if(square != 0x78000000){
                square = square << 2;
@@ -46,7 +46,7 @@ void squareUpdate(){
                square = preblockVal;
             }
         }
-        if(getbtns() & 0x02){
+        if(getbtns() & 0x04){
             preblockVal =square;
            square =square >> 2;
             if(square >= 0x1e){
@@ -76,11 +76,15 @@ void squareUpdate(){
 
         if((end & pos) != 0){     //if true, stack
             OledUpdate();
+            int k;
+            for(k = 1; k <= 97; k += 2){ 
+                removeRow(i);
+            }
             if(i > 106){
                 PORTE = 0xff; // temporary
                 while(1){
                     delay(1000);
-                    if(getbtns() & 0x04){
+                    if(getbtns() & 0x08){
                         main();
                     }
                 }  
@@ -88,27 +92,34 @@ void squareUpdate(){
             return;
         }
 
-        int k;
-        for(k = 1; k <= 97; k += 2){ 
-            removeRow(k);
-        }
-
         OledUpdate();
         delay(delayVar);
     }
 }
 
-void stickUpdate(){
+void stickUpdate(int startPos){
     int i;
     int end = 0;
     int pos = 0;
-    for(i = 106; i > 0; i--){
+
+    for(i = startPos; i > 0; i--){
+        if(getbtns() & 0x1){
+            deletePrev(0, i);
+            deletePrev(1, i);
+            deletePrev(2, i);
+            blockPage(pillar);
+            delay(5);
+            pillarUpdate(i);
+            break;
+        }
+        delay(delayVar / 2);
+
         moveStick(0, i, page1);
         moveStick(1, i, page2);
         moveStick(2, i, page3);
         moveStick(3, i, page4);
 
-        if(getbtns() & 0x01){
+        if(getbtns() & 0x02){
             preblockVal = stick;
             if(stick != 0x7f800000){
                stick = stick << 2;
@@ -124,7 +135,7 @@ void stickUpdate(){
                stick = preblockVal;
             }
         }
-        if(getbtns() & 0x02){
+        if(getbtns() & 0x04){
             preblockVal = stick;
             stick = stick >> 2;
             if(stick >= 0x1fe){
@@ -138,6 +149,9 @@ void stickUpdate(){
                 stick = preblockVal;
             }
         }
+        
+        
+        
         deletePrev(2, i);
 
         end =   (rgbOledBmp[i - 1] & 0xfe) + 
@@ -152,11 +166,15 @@ void stickUpdate(){
 
         if((end & pos) != 0){     //if true, stack
             OledUpdate();
+            int k;
+            for(k = 1; k <= 97; k += 2){ 
+                removeRow(i);
+            }
             if(i > 106){
                 PORTE = 0xff; // temporary
                 while(1){
                     delay(1000);
-                    if(getbtns() & 0x04){
+                    if(getbtns() & 0x08){
                         main();
                     }
                 }  
@@ -164,28 +182,41 @@ void stickUpdate(){
             return;
         }
 
-        int k;
-        for(k = 1; k <= 97; k += 2){ 
-            removeRow(k);
-        }
-
         OledUpdate();
-        delay(delayVar);
+        delay(delayVar / 2); 
     }
 }
 
-void pillarUpdate(){
+void pillarUpdate(int startPos){
     int i;
     int end = 0;
     int pos = 0;
-    for(i = 106; i > 0; i--){
+    for(i = startPos; i > 0; i--){
+
+        if(getbtns() & 0x1){
+            deletePrev(0, i);
+            deletePrev(1, i);
+            deletePrev(2, i);
+            deletePrev(3, i);
+            deletePrev(4, i);
+            deletePrev(5, i);
+            deletePrev(6, i);
+            deletePrev(7, i);
+            deletePrev(8, i);
+            delay(5);
+            blockPage(stick);
+            stickUpdate(i);
+            break;
+            
+        }
+        delay(delayVar / 2);
         
         movePillar(0, i, page1);
         movePillar(1, i, page2);
         movePillar(2, i, page3);
         movePillar(3, i, page4);
 
-        if(getbtns() & 0x01){
+        if(getbtns() & 0x02){
             preblockVal = pillar;
             if(pillar != 0x60000000){
                pillar = pillar << 2;
@@ -207,7 +238,7 @@ void pillarUpdate(){
                pillar = preblockVal;
             }
         }
-        if(getbtns() & 0x02){
+        if(getbtns() & 0x04){
             preblockVal = pillar;
             pillar = pillar >> 2;
             if(pillar >= 0x6){
@@ -238,13 +269,18 @@ void pillarUpdate(){
                 (block[i + 128] << 8) +
                 (block[i + 256] << 16) + 
                 (block[i + 384] << 24));
+                
         if((end & pos) != 0){     //if true, stack
             OledUpdate();
+            int k;
+            for(k = 1; k <= 97; k += 2){ 
+                removeRow(i);
+            }
             if(i > 101){
                 PORTE = 0xff; // temporary
                 while(1){
                     delay(1000);
-                    if(getbtns() & 0x04){
+                    if(getbtns() & 0x08){
                         main();
                     }
                 }  
@@ -252,13 +288,7 @@ void pillarUpdate(){
             return;
         }
 
-        int k;
-        for(k = 1; k <= 97; k += 2){ 
-            removeRow(k);
-        }
-
         OledUpdate();
-        delay(delayVar);
+        delay(delayVar / 2);
     }
 }
-
