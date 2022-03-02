@@ -6,8 +6,9 @@
 
 void init(){
     PORTECLR = 0xff;
-    TRISECLR = 0x0ff;  // set bits 0-7 to output (0)
-    TRISDSET = (1 << 8);
+    TRISECLR = 0x0ff;     // set bits 0-7 to output (0)
+    TRISFSET = 0x02;      // set bit 1 to intput (1) for BTN1
+    //TRISDSET = (1 << 8);
     TRISD |= 0xf7e0;      // set to input (1)
     TMR2 = 0x0;           // set timer 2 to start at 0
     T2CON |= 0x8070;      // 8 start timer, 7 set prescale to 256
