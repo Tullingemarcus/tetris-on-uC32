@@ -81,6 +81,7 @@ void squareUpdate(){
                 removeRow(i);
             }
             if(i > 106){
+                gameover();
                 PORTE = 0xff; // temporary
                 while(1){
                     delay(1000);
@@ -171,6 +172,7 @@ void stickUpdate(int startPos){
                 removeRow(i);
             }
             if(i > 106){
+                gameover();
                 PORTE = 0xff; // temporary
                 while(1){
                     delay(1000);
@@ -277,6 +279,7 @@ void pillarUpdate(int startPos){
                 removeRow(i);
             }
             if(i > 101){
+                gameover();
                 PORTE = 0xff; // temporary
                 while(1){
                     delay(1000);

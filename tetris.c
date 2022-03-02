@@ -9,15 +9,9 @@ int delayVar = 50;
 int count = 0;
 
 void user_isr(void)
-{
+{    
     // PORTE += 1;
-    if(IFS(0) & 0x8000){
-        while(!(PORTD & 0x0800)){
-
-        }
-    }
     IFS(0) &= 0xfeff;
-    
     return;
 }
 
@@ -34,9 +28,12 @@ int getbtns(void){
 void tetris()
 {
 
-    //letterA();
-    digit0(0);
-    digit1(2);
+    /*
+    while(1){
+        score();
+        delay(1000);
+    }
+    */
     delay(1000);
     if(count == 1){
         blockPage(pillar);
