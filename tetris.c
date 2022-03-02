@@ -2,10 +2,10 @@
 #include <pic32mx.h>    // Declarations of system-specific addresses etc
 #include "tetris.h"     // Declarations for sepcific tetris function
 
-int square = 0x0000001e;
+int square = 0x001e0000;
 int stick = 0x000001fe;
-int pillar = 0x00000006;
-int delayVar = 20;
+int pillar = 0x0006000;
+int delayVar = 50;
 int count = 0;
 
 void user_isr(void)
@@ -22,20 +22,25 @@ void user_isr(void)
 }
 
 int getbtns(void){
-    int BTN2 =(PORTD & 0x020) >> 5;
-    int BTN3 =(PORTD & 0x040) >> 5;
-    int BTN4 =(PORTD & 0x080) >> 5;
-    int btnstate = BTN2 | BTN3 | BTN4;
+    int BTN1 =(PORTF & 0x002) >> 1;
+    int BTN2 =(PORTD & 0x020) >> 4;
+    int BTN3 =(PORTD & 0x040) >> 4;
+    int BTN4 =(PORTD & 0x080) >> 4;
+    int btnstate = BTN1 | BTN2 | BTN3 | BTN4;
     return btnstate;
 }
 
 // main function where the code will be run
 void tetris()
 {
+
+    //letterA();
+    digit0(0);
+    digit1(2);
     delay(1000);
     if(count == 1){
         blockPage(pillar);
-        pillarUpdate();
+        pillarUpdate(106);
         count = 0;
     }
     else{
@@ -46,5 +51,7 @@ void tetris()
     if(delayVar >= 10){
         delayVar--;
     }
+
+
     return;
 }
