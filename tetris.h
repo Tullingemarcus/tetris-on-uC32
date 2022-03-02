@@ -11,6 +11,8 @@ void display_start(void);
 #define cbOledDispMax   512 //max number of bytes in display buffer
 unsigned char rgbOledBmp[cbOledDispMax];
 int block[512];                 // tetrisblock
+int letter[512];  
+int digit[512];
 extern int square;
 extern int stick;
 extern int pillar;
@@ -23,7 +25,8 @@ void tetris(void);
 void delay(int);
 void enable_interrupt(void);
 void squareUpdate(void);
-void stickUpdate(void);
+void stickUpdate(int);
+void pillarUpdate(int);
 int blockPos(int, int);
 void blockPage(int);
 void removeRow(int);
@@ -31,4 +34,9 @@ int getbtns(void);
 void deletePrev(int, int);
 void moveSquare(int, int, int);
 void moveStick(int, int, int);
-void pillarUpdate(void);
+void movePillar(int, int, int);
+void letterA(void);
+void digit0(int);
+void digit1(int);
+
+
