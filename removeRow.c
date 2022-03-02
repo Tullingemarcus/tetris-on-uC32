@@ -12,9 +12,9 @@ void removeRow(int k){
             rgbOledBmp[j]       = rgbOledBmp[j + 2];  // remove row if full and shift down
             rgbOledBmp[j + 128] = rgbOledBmp[j + 2 + 128];
             rgbOledBmp[j + 256] = rgbOledBmp[j + 2 + 256];
-            rgbOledBmp[j + 384] = rgbOledBmp[j + 2 + 384];
-                       
+            rgbOledBmp[j + 384] = rgbOledBmp[j + 2 + 384];     
         }
+        score();
         OledUpdate(); 
         PORTE += 1;                     // increment LEDs by 1
     }
