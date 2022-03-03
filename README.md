@@ -27,5 +27,5 @@ These files are copied or modified and are not part of our original work:
 * vectors.S
 * Makefile
 
-For more information about copyright, see file **COPYING**
+For more information about copyright, see file **COPYING**.
 
