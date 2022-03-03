@@ -189,7 +189,7 @@ void OledPutBuffer(int cb, unsigned char *rgbTx)
     }
 }
 
-// function to fill array with desired value
+// function to fill array with desired value. Lights up the border around the game
 void display_start()
 {
     rgbOledBmp[0] = 0xff;

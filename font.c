@@ -2,15 +2,6 @@
 #include <pic32mx.h>    // Declarations of system-specific addresses etc
 #include "tetris.h"     // Declarations for sepcific tetris function
 
-/*
-1 1 1 0  0 1 1 0  1 0 0 1  1 1 1 1  0 1 1 0  1 0 0 1  1 1 1 1  1 1 1 1
-1 0 0 1  1 0 0 1  1 1 1 1  1 0 0 0  1 0 0 1  1 0 0 1  1 0 0 0  1 0 0 1 
-1 0 0 0  1 1 1 1  1 0 0 1  1 1 1 0  1 0 0 1  1 0 0 1  1 1 1 0  1 1 1 1 
-1 0 1 1  1 0 0 1  1 0 0 1  1 0 0 0  1 0 0 1  1 0 0 1  1 0 0 0  1 0 1 1 
-1 0 0 1  1 0 0 1  1 0 0 1  1 0 0 0  1 0 0 1  1 0 0 1  1 0 0 0  1 0 0 1 
-1 1 1 0  1 0 0 1  1 0 0 1  1 1 1 1  0 1 1 0  0 1 1 0  1 1 1 1  1 0 0 1 
-*/
-
 // When called, write GAMEOVER to the top of the screen.
 void gameover(){
     letter[122] = 0x67;
@@ -69,7 +60,9 @@ void gameover(){
     rgbOledBmp[118 + 384] |= letter[118 + 384];
     rgbOledBmp[117 + 384] |= letter[117 + 384];
 }
-
+/* The following functions writes a digit to the display. Takes in argument page 
+*  that states what page should be updated. Argument page = [0, 3].
+*/ 
 void digit0(int page){
     digit[122 + page * 128] = 0x6 << 2;
     digit[121 + page * 128] = 0x9 << 2;
@@ -85,7 +78,6 @@ void digit0(int page){
     rgbOledBmp[118 + page * 128] |= digit[118 + page * 128];
     rgbOledBmp[117 + page * 128] |= digit[117 + page * 128];
 }
-
 
 void digit1(int page){
     digit[122 + page * 128] = 0x4 << 2;
@@ -232,6 +224,7 @@ void digit9(int page){
     rgbOledBmp[117 + page * 128] |= digit[117 + page * 128];
 }
 
+// Clears the digit on the specified page
 void digitclr(int page){
     if(page == 0){
         rgbOledBmp[122 + page * 128] &= 0x01;

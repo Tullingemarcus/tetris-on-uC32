@@ -2,12 +2,13 @@
 #include <pic32mx.h>    // Declarations of system-specific addresses etc
 #include "tetris.h"     // Declarations for sepcific tetris function
 
+// These values spawns the blocks in the middle of the screen
 int square = 0x001e0000;
 int stick = 0x000001fe;
 int pillar = 0x0006000;
-int delayVar = 90;
-count = 0;
 
+int delayVar = 90;          // Sets speed of the game. 
+int count = 0;              // Global variable that randomizes which block spawns
 
 // Interrupt-service routine
 void user_isr(void)
@@ -15,7 +16,6 @@ void user_isr(void)
     IFS(0) &= 0xfeff;
     return;
 }
-
 
 // Function to see the state of the buttons
 int getbtns(void){

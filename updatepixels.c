@@ -2,14 +2,18 @@
 #include <pic32mx.h>    // Declarations of system-specific addresses etc
 #include "tetris.h"     // Declarations for sepcific tetris function
 
+
+// page "num" corresponds to the value for each page
 char page1;
 char page2;
 char page3;
 char page4;
 
+// block is the current array with the block
 int block[512];
 int preblockVal;
 
+// masks blockVal to different pages
 void blockPage(int blockVal){
     page1 = (blockVal & 0x000000ff);
     page2 = (blockVal & 0x0000ff00) >> 8;
@@ -17,17 +21,22 @@ void blockPage(int blockVal){
     page4 = (blockVal & 0xff000000) >> 24;
 }
 
+// everything related to the square block
 void squareUpdate(){
     int i;
+
     int end = 0;
     int pos = 0;
+    // for loop for everthing related to the squares movement and collision
     for(i = 106; i > 0; i--){
         
+        // moveSquare moves the square down 1 pixel at a time
         moveSquare(0, i, page1);
         moveSquare(1, i, page2);
         moveSquare(2, i, page3);
         moveSquare(3, i, page4);
 
+        // checks for button presses 02 moves rigth 04 moves left
         if(getbtns() & 0x02){
             preblockVal = square;
             if(square != 0x78000000){
@@ -47,8 +56,8 @@ void squareUpdate(){
             }
         }
         if(getbtns() & 0x04){
-            preblockVal =square;
-           square =square >> 2;
+            preblockVal = square;
+            square = square >> 2;
             if(square >= 0x1e){
                 deletePrev(0, i);
                 deletePrev(1, i);
@@ -62,24 +71,29 @@ void squareUpdate(){
                 square = preblockVal;
             }
         }
+        // delete previous pixel above square
         deletePrev(4, i);
 
+        // calculate next row
         end =   (rgbOledBmp[i - 1] & 0xfe) + 
                 (rgbOledBmp[i - 1 + 128] << 8) +
                 (rgbOledBmp[i - 1 + 128 * 2] << 16) +
                 ((rgbOledBmp[i - 1 + 128 * 3] << 24) & 0x7f000000);
-
+        // calculate current row
         pos =   (block[i] + 
                 (block[i + 128] << 8) +
                 (block[i + 256] << 16) + 
                 (block[i + 384] << 24));
 
+        // checks if current row and next row share any bits
         if((end & pos) != 0){     //if true, stack
             OledUpdate();
+            // checks remove row
             int k;
             for(k = 1; k <= 97; k += 2){ 
                 removeRow(i);
             }
+            // checks if player have gone to far and triggers GAMEOVER
             if(i > 106){
                 digitclr(0);
                 digitclr(1);
@@ -99,16 +113,19 @@ void squareUpdate(){
         }
 
         OledUpdate();
+        // delay for the loop
         delay(delayVar);
     }
 }
 
+// everything related to the stick block
 void stickUpdate(int startPos){
     int i;
     int end = 0;
     int pos = 0;
 
     for(i = startPos; i > 0; i--){
+        // rotates block if btn1 is pressed
         if(getbtns() & 0x1){
             deletePrev(0, i);
             deletePrev(1, i);
@@ -120,11 +137,13 @@ void stickUpdate(int startPos){
         }
         delay(delayVar / 2);
 
+        // moveStick moves the stick down 1 pixel at a time
         moveStick(0, i, page1);
         moveStick(1, i, page2);
         moveStick(2, i, page3);
         moveStick(3, i, page4);
 
+        // checks for button presses 02 moves rigth 04 moves left
         if(getbtns() & 0x02){
             preblockVal = stick;
             if(stick != 0x7f800000){
@@ -155,25 +174,27 @@ void stickUpdate(int startPos){
                 stick = preblockVal;
             }
         }
-        
+        // delete previous pixel above stick
         deletePrev(2, i);
-
+        // calculate next row
         end =   (rgbOledBmp[i - 1] & 0xfe) + 
                 (rgbOledBmp[i - 1 + 128] << 8) +
                 (rgbOledBmp[i - 1 + 128 * 2] << 16) +
                 ((rgbOledBmp[i - 1 + 128 * 3] << 24) & 0x7f000000);
-
+        // calculate current row
         pos =   (block[i] + 
                 (block[i + 128] << 8) +
                 (block[i + 256] << 16) + 
                 (block[i + 384] << 24));
-
+        // checks if current row and next row share any bits
         if((end & pos) != 0){     //if true, stack
             OledUpdate();
             int k;
             for(k = 1; k <= 97; k += 2){ 
                 removeRow(i);
             }
+
+            // checks if player have gone to far and triggers GAMEOVER
             if(i > 106){
                 digitclr(0);
                 digitclr(1);
@@ -193,16 +214,17 @@ void stickUpdate(int startPos){
         }
 
         OledUpdate();
+        // delay for the loop
         delay(delayVar / 2); 
     }
 }
-
+// everything related to the pillar block
 void pillarUpdate(int startPos){
     int i;
     int end = 0;
     int pos = 0;
     for(i = startPos; i > 0; i--){
-
+        // rotates block if btn1 is pressed
         if(getbtns() & 0x1){
             deletePrev(0, i);
             deletePrev(1, i);
@@ -220,12 +242,14 @@ void pillarUpdate(int startPos){
             
         }
         delay(delayVar / 2);
-        
+
+        // moveStick moves the stick down 1 pixel at a time
         movePillar(0, i, page1);
         movePillar(1, i, page2);
         movePillar(2, i, page3);
         movePillar(3, i, page4);
 
+        // checks for button presses 02 moves rigth 04 moves left
         if(getbtns() & 0x02){
             preblockVal = pillar;
             if(pillar != 0x60000000){
@@ -268,24 +292,27 @@ void pillarUpdate(int startPos){
                 pillar = preblockVal;
             }
         }
+        
+        // delete previous pixel above pillar
         deletePrev(8, i);
-
+        // calculate next row
         end =   (rgbOledBmp[i - 1] & 0xfe) + 
                 (rgbOledBmp[i - 1 + 128] << 8) +
                 (rgbOledBmp[i - 1 + 128 * 2] << 16) +
                 ((rgbOledBmp[i - 1 + 128 * 3] << 24) & 0x7f000000);
-
+        // calculate current row
         pos =   (block[i] + 
                 (block[i + 128] << 8) +
                 (block[i + 256] << 16) + 
                 (block[i + 384] << 24));
-                
+        // checks if current row and next row share any bits
         if((end & pos) != 0){     //if true, stack
             OledUpdate();
             int k;
             for(k = 1; k <= 97; k += 2){ 
                 removeRow(i);
             }
+            // checks if player have gone to far and triggers GAMEOVER
             if(i > 101){
                 digitclr(0);
                 digitclr(1);
@@ -305,6 +332,7 @@ void pillarUpdate(int startPos){
         }
 
         OledUpdate();
+        // delay for the loop
         delay(delayVar / 2);
     }
 }

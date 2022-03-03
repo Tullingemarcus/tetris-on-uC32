@@ -1,4 +1,4 @@
-# Delay function. Argument in ms.
+# Delay function. The arguemnt sets the delay in milliseconds
 
 .data
 .text
@@ -23,8 +23,8 @@ for:	slti	$t3, $t0, 3750		# i < constant
 exit:	jr	$ra
 	nop
 
-
- enable_interrupt:
+# Enables interrupts
+enable_interrupt:
         ei
         jr      $ra
         nop

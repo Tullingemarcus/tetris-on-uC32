@@ -2,12 +2,15 @@
 #include <pic32mx.h>    // Declarations of system-specific addresses etc
 #include "tetris.h"     // Declarations for sepcific tetris function
 
+// Local variables
 int points = 0;
 int points10 = 0;
 int points100 = 0;
 int points1000 = 0;
+
+// Function to increase the gamescore by 1.
 void score(){
-    
+    // Separate the score into single digits. One for each page.
     points += 1;
     if(points % 10 == 0){
         points10 += 1;
@@ -23,6 +26,7 @@ void score(){
     }
     int temp = (points) | (points10 << 4) | (points100 << 8) | (points1000 << 12);
     int i;
+    // Loop to write each digit to display on the corresponding page
     for(i = 3; i > -1; i--){
         digitclr(i);
         if((temp & 0x000f) == 0){
