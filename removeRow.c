@@ -2,8 +2,9 @@
 #include <pic32mx.h>    // Declarations of system-specific addresses etc
 #include "tetris.h"     // Declarations for sepcific tetris function
 
-
-
+/* When function is called, checks if there are any filled rows on the display.
+** If filled, remove that row and shift all pixels above it down to fill the gap.
+*/
 void removeRow(int k){
     if((rgbOledBmp[k] == 0xff) && (rgbOledBmp[k + 128] == 0xff) 
         && (rgbOledBmp[k + 256] == 0xff) && (rgbOledBmp[k + 384] == 0xff)){ 
@@ -16,7 +17,9 @@ void removeRow(int k){
         }
         score();
         OledUpdate(); 
-        PORTE += 1;                     // increment LEDs by 1
+        if(delayVar >= 10){
+            delayVar -= 1;
+        }
     }
     return;
 }
