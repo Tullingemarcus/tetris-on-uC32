@@ -11,13 +11,14 @@
 1 1 1 0  1 0 0 1  1 0 0 1  1 1 1 1  0 1 1 0  0 1 1 0  1 1 1 1  1 0 0 1 
 */
 
+// When called, write GAMEOVER to the top of the screen.
 void gameover(){
-    letter[122] = 0x6e;
+    letter[122] = 0x67;
     letter[121] = 0x99;
-    letter[120] = 0xf8;
-    letter[119] = 0x9b;
+    letter[120] = 0xf1;
+    letter[119] = 0x9d;
     letter[118] = 0x99;
-    letter[117] = 0x9e;
+    letter[117] = 0x97;
 
     rgbOledBmp[122] |= letter[122];
     rgbOledBmp[121] |= letter[121];
@@ -27,10 +28,10 @@ void gameover(){
     rgbOledBmp[117] |= letter[117];
 
     letter[122 + 128] = 0xf9;
-    letter[121 + 128] = 0x8f;
-    letter[120 + 128] = 0xe9;
-    letter[119 + 128] = 0x89;
-    letter[118 + 128] = 0x89;
+    letter[121 + 128] = 0x1f;
+    letter[120 + 128] = 0x79;
+    letter[119 + 128] = 0x19;
+    letter[118 + 128] = 0x19;
     letter[117 + 128] = 0xf9;
 
     rgbOledBmp[122 + 128] |= letter[122 + 128];
@@ -55,10 +56,10 @@ void gameover(){
     rgbOledBmp[117 + 256] |= letter[117 + 256];
 
     letter[122 + 384] = 0xff;
-    letter[121 + 384] = 0x98;
-    letter[120 + 384] = 0xfe;
-    letter[119 + 384] = 0xb8;
-    letter[118 + 384] = 0x98;
+    letter[121 + 384] = 0x91;
+    letter[120 + 384] = 0xf7;
+    letter[119 + 384] = 0xd1;
+    letter[118 + 384] = 0x91;
     letter[117 + 384] = 0x9f;
 
     rgbOledBmp[122 + 384] |= letter[122 + 384];
