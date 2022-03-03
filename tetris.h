@@ -17,6 +17,7 @@ extern int square;
 extern int stick;
 extern int pillar;
 extern int delayVar;
+extern int count;
 
 // declaration of other functions
 void user_isr(void);
