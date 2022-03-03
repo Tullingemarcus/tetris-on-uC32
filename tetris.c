@@ -5,16 +5,19 @@
 int square = 0x001e0000;
 int stick = 0x000001fe;
 int pillar = 0x0006000;
-int delayVar = 50;
-int count = 0;
+int delayVar = 90;
+count = 0;
 
+
+// Interrupt-service routine
 void user_isr(void)
 {    
-    // PORTE += 1;
     IFS(0) &= 0xfeff;
     return;
 }
 
+
+// Function to see the state of the buttons
 int getbtns(void){
     int BTN1 =(PORTF & 0x002) >> 1;
     int BTN2 =(PORTD & 0x020) >> 4;
@@ -27,28 +30,14 @@ int getbtns(void){
 // main function where the code will be run
 void tetris()
 {
-
-    /*
-    while(1){
-        score();
-        delay(1000);
-    }
-    */
     delay(1000);
-    if(count == 1){
+    if(count % 3 == 1){
         blockPage(pillar);
         pillarUpdate(106);
-        count = 0;
     }
     else{
         blockPage(square);
         squareUpdate();
-        count = 1;
     }
-    if(delayVar >= 10){
-        delayVar--;
-    }
-
-
     return;
 }
