@@ -81,8 +81,12 @@ void squareUpdate(){
                 removeRow(i);
             }
             if(i > 106){
+                digitclr(0);
+                digitclr(1);
+                digitclr(2);
+                digitclr(3);
                 gameover();
-                PORTE = 0xff; // temporary
+                OledUpdate();
                 while(1){
                     delay(1000);
                     if(getbtns() & 0x08){
@@ -90,6 +94,7 @@ void squareUpdate(){
                     }
                 }  
             }
+            count += i;
             return;
         }
 
@@ -151,8 +156,6 @@ void stickUpdate(int startPos){
             }
         }
         
-        
-        
         deletePrev(2, i);
 
         end =   (rgbOledBmp[i - 1] & 0xfe) + 
@@ -172,8 +175,12 @@ void stickUpdate(int startPos){
                 removeRow(i);
             }
             if(i > 106){
+                digitclr(0);
+                digitclr(1);
+                digitclr(2);
+                digitclr(3);
                 gameover();
-                PORTE = 0xff; // temporary
+                OledUpdate();
                 while(1){
                     delay(1000);
                     if(getbtns() & 0x08){
@@ -181,6 +188,7 @@ void stickUpdate(int startPos){
                     }
                 }  
             }
+            count += i;
             return;
         }
 
@@ -279,8 +287,12 @@ void pillarUpdate(int startPos){
                 removeRow(i);
             }
             if(i > 101){
+                digitclr(0);
+                digitclr(1);
+                digitclr(2);
+                digitclr(3);
                 gameover();
-                PORTE = 0xff; // temporary
+                OledUpdate();
                 while(1){
                     delay(1000);
                     if(getbtns() & 0x08){
@@ -288,6 +300,7 @@ void pillarUpdate(int startPos){
                     }
                 }  
             }
+            count += i;
             return;
         }
 
